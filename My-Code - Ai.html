@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kids & Elders Docs Website</title>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Urdu Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #fce4ec, #e0f7fa);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .urdu-text {
+      font-family: 'Noto Nastaliq Urdu', serif;
+      direction: rtl;
+      line-height: 2.2;
+      font-size: 1.2rem;
+      text-align: right;
+    }
+    /* Floating bubbles */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.35;
+      animation: float 10s infinite ease-in-out;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-60px) scale(1.1); }
+      100% { transform: translateY(0) scale(1); }
+    }
+    /* Urdu text adjustments */
+    #chapter-urdu {
+      direction: rtl;
+      text-align: right;
+      line-height: 1.9;
+    }
+    /* Chapter Headings */
+    #chapter-urdu h2, #chapter-urdu h3,
+    #chapter-english h2, #chapter-english h3 {
+      background: linear-gradient(to right, #fce4ec, #e1bee7);
+      padding: 8px 12px;
+      border-radius: 10px;
+      margin: 12px 0;
+      display: inline-block;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Bubbles -->
+  <div class="bubble bg-pink-300 w-24 h-24 top-20 left-10"></div>
+  <div class="bubble bg-blue-300 w-16 h-16 top-40 right-10"></div>
+  <div class="bubble bg-green-300 w-20 h-20 bottom-20 left-1/3"></div>
+  <div class="bubble bg-yellow-300 w-12 h-12 bottom-10 right-1/4"></div>
+  <div class="bubble bg-purple-300 w-28 h-28 top-60 left-1/4"></div>
+  <div class="bubble bg-pink-200 w-14 h-14 top-80 right-1/3"></div>
+
+  <!-- Header with Logo -->
+  <header class="text-center py-6 relative z-10 flex flex-col items-center gap-4">
+    <img src="https://drive.google.com/uc?export=view&id=1HgYphMuDLsVHYmA95Zpb4Geb58lteMPd" alt="Academy Logo" class="w-24 h-24 object-contain rounded-full shadow-lg border-4 border-purple-200" />
+    <h1 class="text-4xl md:text-5xl font-extrabold text-purple-700 drop-shadow-lg">
+      🌸 ربیع الاول دروس شیڈول 🌸
+    </h1>
+    <p class="text-lg mt-1 text-gray-700">Learn & Enjoy with Beautiful Lessons For Kids & Elders</p>
+  </header>
+
+  <!-- Tabs Section -->
+  <div class="flex justify-center mb-6 relative z-10">
+    <div class="bg-white/80 backdrop-blur-lg rounded-full shadow-lg flex">
+      <button id="kidsTab" onclick="showCategory('kids')" class="px-6 py-2 rounded-full font-bold text-purple-700 bg-purple-200 shadow-inner">Kids</button>
+      <button id="eldersTab" onclick="showCategory('elders')" class="px-6 py-2 rounded-full font-bold text-gray-600 hover:bg-purple-100">Elders</button>
+    </div>
+  </div>
+
+  <!-- Main Section (Cards Grid) -->
+  <main id="homepage" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-6 pb-32 relative z-10">
+    <!-- Cards will be injected here by JS -->
+  </main>
+
+  <!-- Bottom SVG Shape Divider -->
+  <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none rotate-180">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="w-full h-24 fill-purple-200">
+      <path d="M0,0V46.29c47.64,22.4,103.78,29.13,158,17.39C257.36,45.31,316.42,13,377,7.22c60.68-5.73,117.67,14,176,22.55C648,42.34,711,35.9,769,25.78c58.59-10.24,111.12-27,168-21.61,52.2,4.88,99.28,31.42,149,44.31V0Z"></path>
+    </svg>
+  </div>
+
+  <!-- Chapter Popup -->
+  <div id="chapter-popup" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+    <div class="bg-gradient-to-br from-white to-purple-50 rounded-2xl w-11/12 md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-y-auto shadow-2xl relative p-6">
+      <!-- Top Buttons -->
+      <div class="flex justify-between items-center mb-4">
+        <button onclick="closePopup()" class="px-4 py-2 bg-red-400 hover:bg-red-500 text-white rounded-full shadow">⬅ Back</button>
+        <div class="space-x-2">
+          <button onclick="showUrdu()" class="px-4 py-2 bg-green-400 hover:bg-green-500 text-white rounded-full shadow">اردو</button>
+          <button onclick="showEnglish()" class="px-4 py-2 bg-blue-400 hover:bg-blue-500 text-white rounded-full shadow">English</button>
+        </div>
+      </div>
+
+      <!-- Urdu Content -->
+      <div id="chapter-urdu" class="hidden urdu-text"></div>
+
+      <!-- English Content -->
+      <div id="chapter-english" class="hidden prose prose-lg max-w-none"></div>
+    </div>
+  </div>
+
+  <script>
+    // Chapters Data
+    const chapters = [
+      {
+        no: 1,
+        title: "ماہِ ربیع الاول کا تعارف و فضیلت",
+        date: "12-09-2025",
+        category: "kids",
+        urdu: `
+          <h2 class="text-2xl font-extrabold text-green-700">درس نمبر 01: ماہِ ربیع الاول کا تعارف و فضیلت</h2><br>
+<h3 class="text-xl font-bold text-purple-700"> سابقہ درس کی دہرائی</h3>
+          <p> بچو! کل ہم نے کون سا مہینا پڑھا تھا؟</p>
+          <h3 class="text-xl font-bold text-purple-700">ربیع الاول کی شان</h3>
+          <p> پیارے بچو! ربیع الاول اسلامی سال کا تیسرا مہینا ہے۔ یہ بہت ہی پیارا مہینا ہے کیونکہ اس مہینے میں ہمارے پیارے نبی حضرت محمد ﷺ پیدا ہوئے۔ اللہ پاک نے نبی کریم ﷺ کو ساری دنیا کے لیے رحمت بنا کر بھیجا۔ اسی لیے یہ مہینا برکتوں اور خوشیوں سے بھرا ہوا ہے۔
+ایک بزرگ عالم دین فرماتے ہیں: یہی وہ مبارک مہینا ہے جس میں اللہ پاک نے اپنے پیارے نبی ﷺ کے آنے کی خوشی میں دنیا والوں کے لیے بھلائیاں اور رحمتیں عطا فرمائیں۔ اسی مہینے کی 12 تاریخ کو ہمارے پیارے نبی ﷺ دنیا میں تشریف لائے۔
+</p>
+<h3 class="text-xl font-bold text-purple-700"> ربیع الاول کی عظمتیں</h3>
+          <p> بچو! سوچو اگر ہمارے پیارے نبی ﷺ دنیا میں نہ آتے تو نہ ہمیں عیدیں ملتیں اور نہ ہی دین اسلام کی روشنی نصیب ہوتی۔ دنیا کی ساری رونقیں اور خوشیاں ہمارے پیارے نبی ﷺ کی وجہ سے ہیں۔ اسی لیے ربیع الاول کی 12 تاریخ مسلمانوں کے لیے بہت بڑی خوشی کا دن ہے۔ اسے عاشقانِ رسول کی سب سے بڑی عید کہا جاتا ہے۔ </p>
+<h3 class="text-xl font-bold text-purple-700">
+ربیع الاول کہنے کی وجہ
+</h3>
+<p>
+پیارے بچو! "ربیع" موسمِ بہار کو کہتے ہیں۔ بہار وہ وقت ہوتا ہے جب نہ زیادہ گرمی ہوتی ہے اور نہ زیادہ سردی۔ اس موسم میں پھول کھلتے ہیں اور پودے خوشبو دیتے ہیں۔ عرب لوگ اس موسم کو ربیع کہتے تھے، اسی لیے اس مہینے کا نام "ربیع الاول" رکھا گیا۔ اس کے بعد والا مہینا "ربیع الآخر" کہلاتا ہے۔
+</p>
+<h3 class="text-xl font-bold text-purple-700">
+درس سے حاصل ہونے والا سبق
+</h3>
+<p>
+بچو! ہمیں یہ سبق ملا کہ ربیع الاول بہت مبارک مہینا ہے کیونکہ اس مہینے میں ہمارے پیارے نبی حضرت محمد ﷺ دنیا میں تشریف لائے۔ اس مہینے میں ہمیں نبی کریم ﷺ کی آمد کی خوشی منانی چاہیے اور شکر ادا کرنا چاہیے کہ اللہ پاک نے ہمیں اپنے نبی کا امتی بنایا۔
+</p>
+<h3 class="text-xl font-bold text-pink-700">
+یاد رکھنے والی باتیں
+</h3>
+<ul class="list-disc pl-6">
+ <li> ربیع الاول اسلامی سال کا تیسرا مہینا ہے۔</li>
+ <li>
+ہمارے پیارے نبی حضرت محمد ﷺ اسی مہینے کی 12 تاریخ کو پیدا ہوئے۔</li>
+ <li>
+اس مہینے کی وجہ سے دنیا میں خوشیاں اور رحمتیں آئیں۔</li> 
+<li>
+"ربیع" موسمِ بہار کو کہتے ہیں، اسی وجہ سے اس مہینے کا نام "ربیع الاول" ہے۔</li> 
+</ul>
+<!-- 📚 Book Info Urdu -->
+<div class="my-6 p-6 rounded-2xl shadow-lg border border-green-300 bg-gradient-to-r from-green-50 to-emerald-50 text-right urdu-text">
+  <h3 class="text-2xl font-bold text-green-800 mb-3 flex items-center gap-2 justify-end">
+    📖 ماخذ کتاب
+  </h3>
+  <p class="text-gray-700 leading-relaxed">
+    یہ درس 
+    <span class="font-semibold text-green-700">"عاشقِ میلاد بادشاہ"</span> 
+    رسالے سے تیار کیا گیا ہے، مصنف <span class="font-semibold">المدینۃ العلمیہ</span>، 
+    ناشر <span class="font-semibold">مکتبۃ المدینہ</span>۔
+<a href="https://www.dawateislami.net/bookslibrary/ur/ashiq-e-milad-badshah"><span class="font-semibold text-green-700">رسالہ ڈاؤنلوڈ کریں</span>۔ </a>
+  </p>
+</div>
+
+        `
+,
+english: `
+          <h2 class="text-2xl font-extrabold text-blue-700">Lesson No. 01: Introduction and Importance of Rabi-ul-Awwal</h2>
+          <p>(Revision of Previous Lesson) Children! Which month did we learn about yesterday?</p>
+          <h3 class="text-xl font-bold text-pink-700">The Blessing of Rabi-ul-Awwal</h3>
+          <p>Dear children! Rabi-ul-Awwal is the third month of the Islamic year ...</p>
+        `
+
+      }
+,
+      {
+        no: 1,
+        title: "Seerat-un-Nabi ﷺ for Elders",
+        date: "12-09-2025",
+        category: "elders",
+        urdu: `
+          <h2 class="text-2xl font-extrabold text-green-700">درس نمبر 01 (بڑوں کیلئے): سیرت النبی ﷺ</h2>
+          <p>محترم سامعین! آج ہم رسول اللہ ﷺ کی حیات طیبہ پر بات کریں گے ...</p>
+        `,
+        english: `
+          <h2 class="text-2xl font-extrabold text-blue-700">Lesson No. 01 (For Elders): Seerat-un-Nabi ﷺ</h2>
+          <p>Dear listeners! Today we will discuss the blessed life of our Prophet ﷺ ...</p>
+        `
+      }
+    ];
+
+    const homepage = document.getElementById('homepage');
+    const urduContent = document.getElementById('chapter-urdu');
+    const engContent = document.getElementById('chapter-english');
+    const popup = document.getElementById('chapter-popup');
+    const kidsTab = document.getElementById('kidsTab');
+    const eldersTab = document.getElementById('eldersTab');
+
+    // Render Chapter Cards
+    function renderChapters(category) {
+      homepage.innerHTML = "";
+      chapters.filter(ch => ch.category === category).forEach(ch => {
+        const card = document.createElement('div');
+        card.className = "cursor-pointer rounded-2xl shadow-lg bg-white/80 hover:scale-105 transform transition p-4 flex flex-col justify-between border-4 border-dashed border-purple-200 hover:border-purple-400";
+        card.innerHTML = `
+          <div class="text-sm text-gray-500">Chapter ${ch.no}</div>
+          <h2 class="text-center text-lg font-bold text-purple-700">${ch.title}</h2>
+          <div class="text-right text-xs text-gray-400">${ch.date}</div>
+        `;
+        card.onclick = () => openChapter(ch);
+        homepage.appendChild(card);
+      });
+    }
+
+    function openChapter(ch) {
+      urduContent.innerHTML = ch.urdu;
+      engContent.innerHTML = ch.english;
+      showUrdu();
+      popup.classList.remove('hidden');
+    }
+
+    function closePopup() {
+      popup.classList.add('hidden');
+    }
+
+    function showUrdu() {
+      urduContent.classList.remove('hidden');
+      engContent.classList.add('hidden');
+    }
+
+    function showEnglish() {
+      engContent.classList.remove('hidden');
+      urduContent.classList.add('hidden');
+    }
+
+    function showCategory(category) {
+      renderChapters(category);
+      if (category === "kids") {
+        kidsTab.classList.add("bg-purple-200","text-purple-700","shadow-inner");
+        kidsTab.classList.remove("text-gray-600","hover:bg-purple-100");
+        eldersTab.classList.remove("bg-purple-200","text-purple-700","shadow-inner");
+        eldersTab.classList.add("text-gray-600","hover:bg-purple-100");
+      } else {
+        eldersTab.classList.add("bg-purple-200","text-purple-700","shadow-inner");
+        eldersTab.classList.remove("text-gray-600","hover:bg-purple-100");
+        kidsTab.classList.remove("bg-purple-200","text-purple-700","shadow-inner");
+        kidsTab.classList.add("text-gray-600","hover:bg-purple-100");
+      }
+    }
+
+    // Default: Show Kids
+    showCategory('kids');
+  </script>
+</body>
+</html>
